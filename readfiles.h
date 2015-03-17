@@ -1,4 +1,4 @@
-
+#include <stdlib>
 
 typedef struct ngram{
 	char text;
