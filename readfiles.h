@@ -7,5 +7,8 @@ typedef struct ngram{
 	int start=0;	
 };
 
+
 int readfile(FILE in, ngram ngrams);
+
+int readfile_from_ngrams(FILE in, ngram ngrams);
 
