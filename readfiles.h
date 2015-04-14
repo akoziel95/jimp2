@@ -1,14 +1,23 @@
-#include <stdlib>
+#include<stdlib.h>
+#include<string.h>
+#include<stdio.h>
 
-typedef struct ngram{
-	char text;
+typedef struct {
+	char *text;
 	char **sufixes;
-	int *probs;
-	int start=0;	
-};
+	int start;
+	int sufixc;
+	int sufixsize;	
+}ngram;
 
+void pusharray(char **tab, int size);
+int sumlength(char **tab, int size);
+int addngram(ngram *tab, int *l, char **tabc, int sizec);
+ngram *readfile(FILE *in, ngram *tab, int *size, int n,int *counter);
 
-int readfile(FILE in, ngram ngrams);
+int readfile_from_ngrams(FILE in, ngram *tab, int *size);
 
-int readfile_from_ngrams(FILE in, ngram ngrams);
+void substring(char s[], char sub[], int p, int l);
 
+ngram *inittab();
+int resize(ngram *tab, int size);

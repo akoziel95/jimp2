@@ -1,16 +1,17 @@
 #include"readfiles.h"
+#include"generator.h"
 #include<stdio.h>
-#include <stdlib.h>
-#include <getopt.h>
+#include<stdlib.h>
+#include<getopt.h>
 
-char *usage="Aby poprawnie uruchomiæ program nale¿y podaæ argumenty:\n"
+char *usage="Aby poprawnie uruchomiÄ‡ program naleÅ¼y podaÄ‡ argumenty:\n"
 "-d plik z danymi wejsciowymi\n" 
 "-o plik wyjsciowy"
-"-g plik z n-gramami(w przypadku generowania tekstu bez u¿ycia plików bazowych) \n"
-"-w iloœæ wygenerowanych s³ów(domyœlnie 100)\n"
-"-c iloœæ wygenerowanych akapitów(domyœlnie 2)\n" 
+"-g plik z n-gramami(w przypadku generowania tekstu bez uÅ¼ycia plikÃ³w bazowych) \n"
+"-w iloÅ›Ä‡ wygenerowanych sÅ‚Ã³w(domyÅ›lnie 100)\n"
+"-c iloÅ›Ä‡ wygenerowanych akapitÃ³w(domyÅ›lnie 2)\n" 
 "-s nazwa pliku ze statystykami \n"
-
+"-n stopien n-gramu";
 int main(int argc, char **argv)
 {	
 	int opt;
@@ -21,9 +22,9 @@ int main(int argc, char **argv)
 	int w = 100;
 	int c = 2;
 	char *stat;
+	int n=3;
 
-
-	while ((opt = getopt (argc, argv, "d:o:g:w:c:s:")) != -1) {
+	while ((opt = getopt (argc, argv, "d:o:g:w:c:s:n:")) != -1) {
     switch (opt) {
     case 'd':
       inp = optarg;
@@ -38,11 +39,14 @@ int main(int argc, char **argv)
       w = atoi (optarg);
       break;
     case 'c':
-      c = optarg;
+      c = atoi(optarg);
       break;
-    case 'd':
+    case 's':
       stat = optarg;
       break;
+    case 'n':
+	n=atoi(optarg);
+	break;
     default:                   /* '?' */
       fprintf (stderr, usage, progname);
       exit (EXIT_FAILURE);
@@ -61,16 +65,18 @@ int main(int argc, char **argv)
         
          FILE *inf = fopen (inp, "r");
     if (inf == NULL) {
+
+		
       fprintf (stderr, "%s Blad otwierania pliku z tekstem bazowym %s\n\n", argv[0], inp);
       exit (EXIT_FAILURE);
     }
-	else {
+	/*else {
 		inf = fopen(ingr, "r");
 		if (inf == NULL) {
-      		fprintf (stderr, "%s Blad otwierania pliku z baz¹ n-gramów %s\n\n", argv[0], inp);
+      		fprintf (stderr, "%s Blad otwierania pliku z bazÄ… n-gramÃ³w %s\n\n", argv[0], inp);
       		exit (EXIT_FAILURE);
     	}
-	}
+	}*/
 FILE *out = fopen (outc, "w");
     if (out == NULL) {
       fprintf (stderr, "%s Blad otwierania pliku do zapisu tekstu %s\n\n", argv[0], outc);
@@ -78,5 +84,15 @@ FILE *out = fopen (outc, "w");
       exit (EXIT_FAILURE);
     }
 
+int *l=malloc(sizeof(int));
+int b=5;
+ngram *tab=malloc(sizeof*tab*b);
+tab=readfile(inf,tab, &b, n, l);
+generate(tab, *l, out, w, c);
 
-//tutaj zaczyna siê wywo³ywanie funkcji odczytu i generacji tekstu
+free(tab);
+close(inf);
+close(out);
+//tutaj zaczyna siÄ™ wywoÅ‚ywanie funkcji odczytu i generacji tekstu
+return 0;
+}
